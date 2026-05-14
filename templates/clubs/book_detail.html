@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }} — Книжный клуб{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col-md-3 text-center">
+    {% if book.cover_url %}
+      <img src="{{ book.cover_url }}" class="img-fluid rounded shadow" alt="{{ book.title }}">
+    {% else %}
+      <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height:300px">
+        <span class="text-white" style="font-size:5rem">📖</span>
+      </div>
+    {% endif %}
+  </div>
+  <div class="col-md-9">
+    <h1 class="h2">{{ book.title }}</h1>
+    <p class="lead text-muted">{{ book.author }}{% if book.year %}, {{ book.year }}{% endif %}</p>
+    {% if book.genre %}
+      <span class="badge bg-primary mb-2">{{ book.genre.name }}</span>
+    {% endif %}
+    {% if avg_rating %}
+      <p class="h5 text-warning">★ {{ avg_rating }} / 5</p>
+    {% endif %}
+    {% if book.description %}
+      <p class="mt-3">{{ book.description }}</p>
+    {% endif %}
+  </div>
+</div>
+
+<h2 class="h4 mb-3">Рецензии ({{ reviews|length }})</h2>
+
+{% for review in reviews %}
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <!-- ⚠️ review.member.user.username вызывает 2 лишних SELECT
+           если reviews получены без select_related('member__user') -->
+      <strong>{{ review.member.user.username }}</strong>
+      <span class="text-warning">
+        {% for i in "12345" %}
+          {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+        {% endfor %}
+      </span>
+    </div>
+    <p class="mt-2 mb-1">{{ review.text }}</p>
+    <small class="text-muted">{{ review.created_at|date:"d.m.Y" }}</small>
+  </div>
+</div>
+{% empty %}
+  <p class="text-muted">Рецензий пока нет.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Книжный клуб{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .star { color: #f5a623; }
+    .book-card { transition: transform .15s; }
+    .book-card:hover { transform: translateY(-4px); box-shadow: 0 4px 16px rgba(0,0,0,.12); }
+    .navbar-brand { font-weight: 700; letter-spacing: .5px; }
+  </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="/">📚 Книжный клуб</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Книги</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'clubs:review_list' %}">Рецензии</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mb-5">
+  {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

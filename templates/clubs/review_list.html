@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Все рецензии — Книжный клуб{% endblock %}
+
+{% block content %}
+<h1 class="h2 mb-4">Все рецензии</h1>
+
+<p class="text-muted">
+  Всего рецензий: <strong>{{ reviews|length }}</strong>
+  — <em>Открой Django Debug Toolbar чтобы увидеть сколько запросов делает эта страница!</em>
+</p>
+
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Участник</th>
+        <th>Книга</th>
+        <th>Оценка</th>
+        <th>Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for review in reviews %}
+      <tr>
+        <!-- ⚠️ Каждая из этих строк потенциально делает 2-3 SQL-запроса -->
+        <td>
+          <a href="{% url 'clubs:member_profile' review.member.user.username %}">
+            {{ review.member.user.username }}
+          </a>
+        </td>
+        <td>
+          <a href="{% url 'clubs:book_detail' review.book.pk %}">
+            {{ review.book.title }}
+          </a>
+        </td>
+        <td class="text-warning">
+          {% for i in "12345" %}
+            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+          {% endfor %}
+        </td>
+        <td class="text-muted small">{{ review.created_at|date:"d.m.Y" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="text-center text-muted">Рецензий нет</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
